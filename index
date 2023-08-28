@@ -1,0 +1,136 @@
+<!--小叶制作，允许盗用-->
+<!--我不想被人误会，说我盗源码-->
+<!--
+全部内容均是我自己个人写的
+也是突发奇想，闲的没事干才写的
+请看声明
+-->
+
+<!DOCTYPE html>
+<html>
+  <head>
+	<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<title>WebCat</title>
+  </head>
+  <style>
+  
+  *{
+    margin:0;
+    padding:0;
+    list-style:none;
+   // border:2px solid red;
+  }
+  
+  body{
+    background-color:#eee;
+    height:100vh;
+  }
+
+  .bodys{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+  }
+
+  .vd{
+    width:200px;
+    height:300px;
+    background:black;
+  }
+
+  .vd video{
+    width:100%;
+    height:100%;
+  }
+
+  .ul{
+    width:280px;
+    height:50px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+
+  .ul div{
+    color:red;
+  }
+
+  .next{
+    width:100px;
+    height:50px;
+    background-color:rgba(0,0,0,0);
+    font-size:1.2em;
+    font-weight:bold;
+    color:red;
+    box-shadow:
+    3px 3px 7px rgba(0,0,0,0.2),
+    -3px -3px 7px white;
+   // border-radius:50%;
+  }
+
+
+
+  
+  </style>
+  <body>	
+
+  <div class = "bodys">
+	<div class="vd">
+     <video loop="loop"></video>
+   </div>
+    <div class="ul">
+      <div class="a">加载中...</div>
+      <div class="b">加载中...</div>
+      <div class="c">加载中...</div>
+    </div>
+    <button class="next" onclick="ks()">下一个</button>
+   <div>
+  </body>
+  <script>
+  
+  function extractLink(str) {
+  // 匹配链接的正则表达式
+  var regex = /(http:\/\/|https:\/\/|ftp:\/\/|ftps:\/\/|www\.)[^\s]+/gi;
+  
+  // 使用正则表达式进行匹配
+  var matches = str.match(regex);
+
+  // 如果匹配到链接，则返回第一个匹配到的链接；否则返回空字符串
+  return matches !== null ? matches[0] : "";
+}
+
+var bq = document.querySelectorAll(".ul div")
+
+
+
+
+const Http = new XMLHttpRequest();
+const url='https://api.auous.com/api/yan/kuaishou.php';
+function ks(){
+Http.open("GET", url);
+Http.send();
+
+Http.onreadystatechange = (e) => {
+  var str = Http.responseText.split("\n")
+  document.querySelector(".vd video").src = extractLink(str[3])
+ //alert(str[3]);
+  if(str[3]=="播放链接："){
+   // alert(document.querySelector(".vd video").src)
+    ks()
+
+    bq[1].innerText = "失败,正在进行重新请求..."
+    return
+  }
+  document.querySelector(".vd video").play()
+  
+  bq.forEach((item,i) => {
+   item.innerText = str[i]
+})
+}
+}
+  ks()
+  
+  </script>
+  </html>
